@@ -7,6 +7,6 @@ class ColorWave(Animation):
         print('starting to run ColorWave...')
         while runFlag():
             print('ColorWave is running...')
-            time.sleep(2)
+            time.sleep(self.refresh)
         
         print('done running ColorWave')

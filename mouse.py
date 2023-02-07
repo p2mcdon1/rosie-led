@@ -7,6 +7,6 @@ class Mouse(Animation):
         print('starting to run Mouse...')
         while runFlag():
             print('Mouse is running...')
-            time.sleep(2)
+            time.sleep(self.refresh)
         
         print('done running Mouse')
