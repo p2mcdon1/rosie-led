@@ -3,7 +3,7 @@ import time
 
 class ColorWave(Animation):
     # override
-    def run(self, runFlag):
+    def onRun(self, runFlag):
         print('starting to run ColorWave...')
         while runFlag():
             print('ColorWave is running...')
