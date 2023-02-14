@@ -1,11 +1,6 @@
 from animation import Animation
-import time
-
-# Example showing how functions, that accept tuples of rgb values,
-# simplify working with gradients
-
-import time
 from neopixel import Neopixel
+import time
 
 class ColorWave(Animation):
     
@@ -16,14 +11,14 @@ class ColorWave(Animation):
         self.strip = Neopixel(numpix, 0, 5, "GRB")
         # strip = Neopixel(numpsix, 0, 0, "GRBW")
 
-        red = (255, 0, 0)
-        orange = (255, 50, 0)
-        yellow = (255, 100, 0)
-        green = (0, 255, 0)
-        blue = (0, 0, 255)
+        electricPurple = (196, 0, 255)
+        steelPink = (200, 39, 178)
+        ultraPink = (251, 98, 246)
+        fuschia = (255, 0, 255)
+        hollywoodCerise = (251, 0, 162)
         indigo = (100, 0, 90)
         violet = (200, 0, 100)
-        colors_rgb = [red, orange, yellow, green, blue, indigo, violet]
+        colors_rgb = [electricPurple, steelPink, ultraPink, fuschia, hollywoodCerise, indigo, violet]
 
         # same colors as normaln rgb, just 0 added at the end
         colors_rgbw = [color+tuple([0]) for color in colors_rgb]
@@ -42,7 +37,7 @@ class ColorWave(Animation):
             self.strip.set_pixel_line_gradient(current_pixel, current_pixel + step, color1, color2)
             current_pixel += step
 
-        self.strip.set_pixel_line_gradient(current_pixel, numpix - 1, violet, red)
+        self.strip.set_pixel_line_gradient(current_pixel, numpix - 1, violet, electricPurple)
         
     # override
     def onRun(self, runFlag):
