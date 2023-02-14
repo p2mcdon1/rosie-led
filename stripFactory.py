@@ -9,3 +9,5 @@ class StripFactory:
     def build(self):
         strip = Neopixel(self.parms.count, 0, self.parms.ledDataPin, "GRB")
         strip.brightness(self.parms.brightness)
+
+        return strip
