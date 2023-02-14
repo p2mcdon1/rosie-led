@@ -1,9 +1,12 @@
+from parms import Parms
 import _thread
+
 
 class Animation:
 
     def __init__(self):
-        self.refresh = 0.01
+        self.parms = Parms()
+        self.refresh = self.parms.refresh
 
     def run(self, runFlag: bool, baton: _thread.LockType):
         baton.acquire()

@@ -1,8 +1,11 @@
-import array, time
+import array
+import time
 from machine import Pin
 import rp2
 
 # PIO state machine for RGB. Pulls 24 bits (rgb -> 3 * 8bit) automatically
+
+
 @rp2.asm_pio(sideset_init=rp2.PIO.OUT_LOW, out_shiftdir=rp2.PIO.SHIFT_LEFT, autopull=True, pull_thresh=24)
 def ws2812():
     T1 = 2
@@ -10,14 +13,16 @@ def ws2812():
     T3 = 3
     wrap_target()
     label("bitloop")
-    out(x, 1)               .side(0)    [T3 - 1]
-    jmp(not_x, "do_zero")   .side(1)    [T1 - 1]
-    jmp("bitloop")          .side(1)    [T2 - 1]
+    out(x, 1)               .side(0)[T3 - 1]
+    jmp(not_x, "do_zero")   .side(1)[T1 - 1]
+    jmp("bitloop")          .side(1)[T2 - 1]
     label("do_zero")
-    nop().side(0)                       [T2 - 1]
+    nop().side(0)[T2 - 1]
     wrap()
 
 # PIO state machine for RGBW. Pulls 32 bits (rgbw -> 4 * 8bit) automatically
+
+
 @rp2.asm_pio(sideset_init=rp2.PIO.OUT_LOW, out_shiftdir=rp2.PIO.SHIFT_LEFT, autopull=True, pull_thresh=32)
 def sk6812():
     T1 = 2
@@ -25,11 +30,11 @@ def sk6812():
     T3 = 3
     wrap_target()
     label("bitloop")
-    out(x, 1)               .side(0)    [T3 - 1]
-    jmp(not_x, "do_zero")   .side(1)    [T1 - 1]
-    jmp("bitloop")          .side(1)    [T2 - 1]
+    out(x, 1)               .side(0)[T3 - 1]
+    jmp(not_x, "do_zero")   .side(1)[T1 - 1]
+    jmp("bitloop")          .side(1)[T2 - 1]
     label("do_zero")
-    nop()                   .side(0)    [T2 - 1]
+    nop()                   .side(0)[T2 - 1]
     wrap()
 
 
@@ -45,19 +50,20 @@ def sk6812():
 # Example: in 'GRBW' we want final form of 0bGGRRBBWW, meaning G with index 0 needs to be shifted 3 * 8bit ->
 # 'G' on index 0: 0b00 ^ 0b11 -> 0b11 (3), just as we wanted.
 # Same hold for every other index (and - 1 at the end for 3 letter strings).
-
 class Neopixel:
     def __init__(self, num_leds, state_machine, pin, mode="RGB", delay=0.0001):
         self.pixels = array.array("I", [0 for _ in range(num_leds)])
         self.mode = set(mode)   # set for better performance
         if 'W' in self.mode:
             # RGBW uses different PIO state machine configuration
-            self.sm = rp2.StateMachine(state_machine, sk6812, freq=8000000, sideset_base=Pin(pin))
+            self.sm = rp2.StateMachine(
+                state_machine, sk6812, freq=8000000, sideset_base=Pin(pin))
             # dictionary of values required to shift bit into position (check class desc.)
             self.shift = {'R': (mode.index('R') ^ 3) * 8, 'G': (mode.index('G') ^ 3) * 8,
                           'B': (mode.index('B') ^ 3) * 8, 'W': (mode.index('W') ^ 3) * 8}
         else:
-            self.sm = rp2.StateMachine(state_machine, ws2812, freq=8000000, sideset_base=Pin(pin))
+            self.sm = rp2.StateMachine(
+                state_machine, ws2812, freq=8000000, sideset_base=Pin(pin))
             self.shift = {'R': ((mode.index('R') ^ 3) - 1) * 8, 'G': ((mode.index('G') ^ 3) - 1) * 8,
                           'B': ((mode.index('B') ^ 3) - 1) * 8, 'W': 0}
         self.sm.active(1)
@@ -86,12 +92,16 @@ class Neopixel:
 
         for i in range(right_pixel - left_pixel + 1):
             fraction = i / (right_pixel - left_pixel)
-            red = round((right_rgb_w[0] - left_rgb_w[0]) * fraction + left_rgb_w[0])
-            green = round((right_rgb_w[1] - left_rgb_w[1]) * fraction + left_rgb_w[1])
-            blue = round((right_rgb_w[2] - left_rgb_w[2]) * fraction + left_rgb_w[2])
+            red = round((right_rgb_w[0] - left_rgb_w[0])
+                        * fraction + left_rgb_w[0])
+            green = round((right_rgb_w[1] - left_rgb_w[1])
+                          * fraction + left_rgb_w[1])
+            blue = round((right_rgb_w[2] - left_rgb_w[2])
+                         * fraction + left_rgb_w[2])
             # if it's (r, g, b, w)
             if len(left_rgb_w) == 4 and 'W' in self.mode:
-                white = round((right_rgb_w[3] - left_rgb_w[3]) * fraction + left_rgb_w[3])
+                white = round(
+                    (right_rgb_w[3] - left_rgb_w[3]) * fraction + left_rgb_w[3])
                 self.set_pixel(left_pixel + i, (red, green, blue, white))
             else:
                 self.set_pixel(left_pixel + i, (red, green, blue))
@@ -166,8 +176,8 @@ class Neopixel:
 
         return r, g, b
 
-
     # Rotate <num_of_pixels> pixels to the left
+
     def rotate_left(self, num_of_pixels):
         if num_of_pixels == None:
             num_of_pixels = 1
@@ -196,4 +206,3 @@ class Neopixel:
         for i in range(self.num_leds):
             self.set_pixel(i, rgb_w)
         time.sleep(self.delay)
-        

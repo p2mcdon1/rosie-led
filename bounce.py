@@ -1,58 +1,49 @@
 from animation import Animation
-import sys
+from stripFactory import StripFactory
 import time
+
 
 class Bounce(Animation):
 
     def __init__(self):
-        self.count = 160
+        Animation.__init__(self)
+
+        numpix = self.parms.count
+
+        stripFactory = StripFactory()
+        self.strip = stripFactory.build()
+
         self.logSize = 10
         self.step = 2
-        self.sleep = 0.01
-        
+        self.logLeft = 0
+        self.leftToRight = True
+
+        self.strip.set_pixel_line_gradient(
+            self.logLeft, self.logSize, self.parms.ultraPink, self.parms.electricPurple)
+
     # override
-    def run(self, runFlag):
+    def onRun(self, runFlag):
         print('starting to run Bounce...')
-        self.items = numpy.zeros(self.count, numpy.ubyte)
-
-        logRight = -self.logSize
-        logLeft = logRight - self.logSize
-
-        rightToLeft = True
 
         while runFlag():
-
-            if (rightToLeft):
-                for x in range(0, self.step):
-                    rightIndex = logRight - x
-                    leftIndex = logLeft - x
-                    if (rightIndex >= 0 and rightIndex < (self.count - 1)):
-                        self.items[rightIndex] = 1
-                    if (leftIndex >= 0 and leftIndex < (self.count - 1)):
-                        self.items[leftIndex] = 0
-                
-                self.__printItems()
-                logRight = logRight + self.step
-                logLeft = logLeft + self.step
-
-                if (logRight > (self.count + self.logSize)):
-                    rightToLeft = False
+            if (self.leftToRight):
+                self.logLeft = self.logLeft + 2
+                if (self.logLeft + self.logSize >= self.parms.count):
+                    self.leftToRight = False
+                    self.logLeft = self.logLeft - 2
+                    self.strip.rotate_left(self.step)
+                else:
+                    self.strip.rotate_right(self.step)
             else:
-                for x in range(0, self.step):
-                    rightIndex = logRight + x
-                    leftIndex = logLeft + x
-                    if (rightIndex >= 0 and rightIndex < (self.count - 1)):
-                        self.items[rightIndex] = 0
-                    if (leftIndex >= 0 and leftIndex < (self.count - 1)):
-                        self.items[leftIndex] = 1
-                
-                self.__printItems()
-                logRight = logRight - self.step
-                logLeft = logLeft - self.step
+                self.logLeft = self.logLeft - 2
+                if (self.logLeft < 0):
+                    self.leftToRight = True
+                    self.logLeft = self.logLeft + 2
+                    self.strip.rotate_right(self.step)
+                else:
+                    self.strip.rotate_left(self.step)
 
-                if (logRight < 0):
-                    rightToLeft = True
+            time.sleep(self.refresh)
+            self.strip.show()
 
-            time.sleep(self.sleep)
-        
         print('done running Bounce')

@@ -5,10 +5,11 @@ from mouse import Mouse
 import _thread
 import time
 
+
 class Runner:
     def __init__(self):
         self.runAnimation = True
-        self.checkRun = lambda : self.runAnimation
+        self.checkRun = lambda: self.runAnimation
         self.baton = _thread.allocate_lock()
         self.bounce = Bounce()
         self.colorWave = ColorWave()
@@ -38,7 +39,7 @@ class Runner:
 
         if (self.selector > 2):
             self.selector = 0
-        
+
         self.runAnimation = True
         if self.selector == 0:
             _thread.start_new_thread(self.__runColorWave, ())
@@ -50,11 +51,10 @@ class Runner:
     def run(self):
         while True:
             pushed = self.keyReader.wasPushed()
-            
+
             if pushed:
                 self.__switch()
-            
+
             time.sleep(0.2)
-        
+
         print('end main loop')
-    
