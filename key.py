@@ -1,32 +1,22 @@
-from pynput import keyboard
-import queue
+from machine import Pin
 
 class KeyReader:
     def __init__(self):
+        
+        self.pushed = False
+        
+        pin = Pin(4, Pin.IN, Pin.PULL_UP)
 
-        self.keyQueue = queue.Queue()
-
-        def on_press(key):
-            try:
-                # queue the string representation
-                self.keyQueue.put('{0}'.format(key.char))
-            except AttributeError:
-                print('special key {0} pressed'.format(
-                    key))
-
-        def on_release(key):
-            if key == keyboard.Key.esc:
-                # queue the key
-                self.keyQueue.put(self.stop())
-
-                # Stop listener
-                return False
-
-        # Collect events until released
-        listener = keyboard.Listener(
-                on_press=on_press,
-                on_release=on_release)
-        listener.start()
-
-    def stop(self):
-        return '##QUIT##'
+        def button_callback(p):
+            if not self.pushed and pin.value() == 0:
+                self.pushed = True
+            
+        pin.irq(trigger=Pin.IRQ_FALLING, handler=button_callback)
+    
+    def wasPushed(self):
+        if self.pushed:
+            self.pushed = False
+            return True
+        else:
+            return False
+        

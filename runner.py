@@ -1,7 +1,6 @@
 from colorwave import ColorWave
 from key import KeyReader
 from mouse import Mouse
-import queue
 import _thread
 import time
 
@@ -39,25 +38,11 @@ class Runner:
 
     def run(self):
         while True:
-            input = ''
-            try:
-                input = self.keyReader.keyQueue.get_nowait()
-            except queue.Empty:
-                input = 'empty'
-
-            if input == 'c':
+            pushed = self.keyReader.wasPushed()
+            
+            if pushed:
                 self.__switch()
-            elif input == self.keyReader.stop():
-                print('main is stopping...')
-
-                
-                if self.runAnimation:
-                    self.runAnimation = False
-                    self.baton.acquire()
-
-                print('child thread has joined')
-                break
-
+            
             time.sleep(0.2)
         
         print('end main loop')
