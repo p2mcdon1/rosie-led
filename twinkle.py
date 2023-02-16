@@ -64,8 +64,8 @@ class Twinkle(Animation):
 
             index = index + 1
 
-        sortedToRemove = toRemove.sort(reverse=True)
-        for i in sortedToRemove:
+        toRemove.sort(reverse=True)
+        for i in toRemove:
             try:
                 self.twinklers.pop(i)
                 #print(f"Removed index {i} as a Twinkler")
