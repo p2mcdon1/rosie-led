@@ -62,7 +62,11 @@ class Twinkle(Animation):
             try:
                 self.twinklers.pop(i)
             except:
-                print("{i} does not exist")
+                print(f"{i} does not exist")
+                print('Twinklers:')
+                print(*self.twinklers)
+                print('ToRemove:')
+                print(*toRemove)
 
     def reducePart(self, val):
         return round(val / 2)
