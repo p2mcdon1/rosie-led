@@ -1,5 +1,4 @@
 from animation import Animation
-import time
 
 
 class Mouse(Animation):
@@ -8,6 +7,6 @@ class Mouse(Animation):
         print('starting to run Mouse...')
         while runFlag():
             print('Mouse is running...')
-            time.sleep(self.refresh)
+            self.rest()
 
         print('done running Mouse')

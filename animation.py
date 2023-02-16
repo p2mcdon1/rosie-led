@@ -1,5 +1,6 @@
 from parms import Parms
 import _thread
+import time
 
 
 class Animation:
@@ -15,3 +16,6 @@ class Animation:
 
     def onRun(self, runFlag):
         pass
+
+    def rest(self):
+        time.sleep(self.refresh)

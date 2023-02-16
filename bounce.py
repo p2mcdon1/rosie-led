@@ -1,14 +1,11 @@
 from animation import Animation
 from stripFactory import StripFactory
-import time
 
 
 class Bounce(Animation):
 
     def __init__(self):
         Animation.__init__(self)
-
-        numpix = self.parms.count
 
         stripFactory = StripFactory()
         self.strip = stripFactory.build()
@@ -43,7 +40,7 @@ class Bounce(Animation):
                 else:
                     self.strip.rotate_left(self.step)
 
-            time.sleep(self.refresh)
+            self.rest()
             self.strip.show()
 
         print('done running Bounce')

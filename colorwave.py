@@ -1,6 +1,5 @@
 from animation import Animation
 from stripFactory import StripFactory
-import time
 
 
 class ColorWave(Animation):
@@ -17,13 +16,8 @@ class ColorWave(Animation):
         colors_rgb = [self.parms.electricPurple, self.parms.steelPink, self.parms.ultraPink,
                       self.parms.fuschia, self.parms.hollywoodCerise, self.parms.indigo, self.parms.violet]
 
-        # same colors as normaln rgb, just 0 added at the end
-        # colors_rgbw = [color+tuple([0]) for color in colors_rgb]
-        # colors_rgbw.append((0, 0, 0, 255))
-
+        # see notes about supporting white-light
         colors = colors_rgb
-        # uncomment colors_rgbw if you have RGBW strip
-        # colors = colors_rgbw
 
         step = round(numpix / len(colors))
         current_pixel = 0
@@ -42,7 +36,7 @@ class ColorWave(Animation):
 
         while runFlag():
             self.strip.rotate_right(1)
-            time.sleep(self.refresh)
+            self.rest()
             self.strip.show()
 
         print('done running ColorWave')
