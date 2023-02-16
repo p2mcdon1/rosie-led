@@ -11,6 +11,7 @@ class Twinkle(Animation):
         stripFactory = StripFactory()
         self.strip = stripFactory.build()
 
+        self.numberOfTwinklers = round(self.parms.count / 10)
         self.colors = self.parms.getColors(True)
         self.pixelRgbs = []
 
@@ -26,14 +27,13 @@ class Twinkle(Animation):
         while runFlag():
             self.updateTwinklers()
 
-            for _ in range(random.randrange(0, 6)):
+            for _ in range(random.randrange(0, self.numberOfTwinklers)):
                 color = random.choice(self.colors)
                 pixel = random.randrange(0, self.parms.count)
                 self.strip.set_pixel(pixel, color)
                 self.pixelRgbs[pixel] = color
 
                 if (color != self.parms.black and self.twinklers.count(pixel) < 1):
-                    # print(f"Adding {pixel} as a Twinkler")
                     self.twinklers.append(pixel)
 
             self.rest()
@@ -48,15 +48,10 @@ class Twinkle(Animation):
         for t in self.twinklers:
             pixelRgb = self.pixelRgbs[t]
             if (pixelRgb == self.parms.black):
-                # print(
-                #    f"{t} was already set to black- marking index {index} for removal")
-                # print('Twinklers:')
-                # print(*self.twinklers)
                 toRemove.append(index)
 
             reducedRgb = self.reduce(pixelRgb)
             if (self.isEffectivelyOff(reducedRgb)):
-                #print(f"{t} is now black")
                 reducedRgb = self.parms.black
 
             self.pixelRgbs[t] = reducedRgb
@@ -66,18 +61,10 @@ class Twinkle(Animation):
 
         toRemove.sort(reverse=True)
         for i in toRemove:
-            try:
-                self.twinklers.pop(i)
-                #print(f"Removed index {i} as a Twinkler")
-            except:
-                print(f"Index {i} does not exist")
-                # print('Twinklers:')
-                # print(*self.twinklers)
-                # print('ToRemove:')
-                # print(*toRemove)
+            self.twinklers.pop(i)
 
     def reducePart(self, val):
-        return round(val / 2)
+        return round(val / 3)
 
     def reduce(self, rgb):
         return (self.reducePart(rgb[0]), self.reducePart(rgb[1]), self.reducePart(rgb[2]))
