@@ -20,7 +20,6 @@ class Twinkle(Animation):
         print('starting to run Twinkle...')
 
         while runFlag():
-
             self.updateTwinklers()
 
             for _ in range(6):
@@ -42,6 +41,8 @@ class Twinkle(Animation):
         toRemove = []
         for t in self.twinklers:
             pixel = self.strip.pixels[t]
+            print(dir(pixel))
+            print(pixel)
             if (pixel == self.parms.black):
                 toRemove.append(index)
 
