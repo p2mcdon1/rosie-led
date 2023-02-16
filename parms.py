@@ -11,3 +11,13 @@ class Parms:
         self.hollywoodCerise = (251, 0, 162)
         self.indigo = (100, 0, 90)
         self.violet = (200, 0, 100)
+        self.black = (0, 0, 0)
+
+    def getColors(self, withBlack: bool = False):
+        colorList = [self.electricPurple, self.steelPink, self.ultraPink,
+                     self.fuschia, self.hollywoodCerise, self.indigo, self.violet]
+
+        if (withBlack):
+            colorList.append(self.black)
+
+        return colorList

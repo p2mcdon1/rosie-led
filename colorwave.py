@@ -13,8 +13,7 @@ class ColorWave(Animation):
 
         self.strip = stripFactory.build()
 
-        colors_rgb = [self.parms.electricPurple, self.parms.steelPink, self.parms.ultraPink,
-                      self.parms.fuschia, self.parms.hollywoodCerise, self.parms.indigo, self.parms.violet]
+        colors_rgb = self.parms.getColors()
 
         # see notes about supporting white-light
         colors = colors_rgb

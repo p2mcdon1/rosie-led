@@ -1,7 +1,5 @@
-from bounce import Bounce
-from colorwave import ColorWave
 from key import KeyReader
-from mouse import Mouse
+from selector import Selector
 import _thread
 import time
 
@@ -11,11 +9,8 @@ class Runner:
         self.runAnimation = True
         self.checkRun = lambda: self.runAnimation
         self.baton = _thread.allocate_lock()
-        self.bounce = Bounce()
-        self.colorWave = ColorWave()
-        self.mouse = Mouse()
         self.keyReader = KeyReader()
-        self.selector = -1
+        self.selector = Selector()
 
     def __runBounce(self):
         self.bounce.run(self.checkRun, self.baton)
@@ -24,7 +19,7 @@ class Runner:
         self.colorWave.run(self.checkRun, self.baton)
 
     def __runMouse(self):
-        self.mouse.run(self.checkRun, self.baton)
+        self.twinkle.run(self.checkRun, self.baton)
 
     def __switch(self):
         print('switching...')
@@ -35,18 +30,9 @@ class Runner:
             self.runAnimation = True
             self.baton.release()
 
-        self.selector = self.selector + 1
+        animation = self.selector.switch()
 
-        if (self.selector > 2):
-            self.selector = 0
-
-        self.runAnimation = True
-        if self.selector == 0:
-            _thread.start_new_thread(self.__runColorWave, ())
-        elif self.selector == 1:
-            _thread.start_new_thread(self.__runMouse, ())
-        elif self.selector == 2:
-            _thread.start_new_thread(self.__runBounce, ())
+        _thread.start_new_thread(animation, (self.checkRun, self.baton))
 
     def run(self):
         while True:
