@@ -12,6 +12,10 @@ class Twinkle(Animation):
         self.strip = stripFactory.build()
 
         self.colors = self.parms.getColors(True)
+        self.pixels = []
+
+        for x in range(self.parms.count):
+            self.pixels.append(self.parms.black)
 
         self.twinklers = []
 
@@ -26,6 +30,7 @@ class Twinkle(Animation):
                 color = random.choice(self.colors)
                 pixel = random.randrange(0, self.parms.count)
                 self.strip.set_pixel(pixel, color)
+                self.pixels[pixel] = color
 
                 if (color != self.parms.black and self.twinklers.count(pixel) < 1):
                     self.twinklers.append(pixel)
@@ -40,9 +45,7 @@ class Twinkle(Animation):
         index = 0
         toRemove = []
         for t in self.twinklers:
-            pixel = self.strip.pixels[t]
-            print(dir(pixel))
-            print(pixel)
+            pixel = self.pixels[t]
             if (pixel == self.parms.black):
                 toRemove.append(index)
 
