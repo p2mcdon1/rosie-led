@@ -26,7 +26,7 @@ class Twinkle(Animation):
         while runFlag():
             self.updateTwinklers()
 
-            for _ in range(6):
+            for _ in range(random.randrange(0, 6)):
                 color = random.choice(self.colors)
                 pixel = random.randrange(0, self.parms.count)
                 self.strip.set_pixel(pixel, color)
@@ -56,7 +56,10 @@ class Twinkle(Animation):
             index = index + 1
 
         for i in toRemove:
-            self.twinklers.pop(i)
+            try:
+                self.twinklers.pop(i)
+            except:
+                print("{i} does not exist")
 
     def reducePart(self, val):
         return round(val / 2)
