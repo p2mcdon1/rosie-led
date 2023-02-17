@@ -1,9 +1,12 @@
 import array
+from stripbase import StripBase
 import time
 from machine import Pin
 import rp2
 
 # PIO state machine for RGB. Pulls 24 bits (rgb -> 3 * 8bit) automatically
+
+
 @rp2.asm_pio(sideset_init=rp2.PIO.OUT_LOW, out_shiftdir=rp2.PIO.SHIFT_LEFT, autopull=True, pull_thresh=24)
 def ws2812():
     T1 = 2
@@ -19,6 +22,8 @@ def ws2812():
     wrap()
 
 # PIO state machine for RGBW. Pulls 32 bits (rgbw -> 4 * 8bit) automatically
+
+
 @rp2.asm_pio(sideset_init=rp2.PIO.OUT_LOW, out_shiftdir=rp2.PIO.SHIFT_LEFT, autopull=True, pull_thresh=32)
 def sk6812():
     T1 = 2
@@ -46,7 +51,7 @@ def sk6812():
 # Example: in 'GRBW' we want final form of 0bGGRRBBWW, meaning G with index 0 needs to be shifted 3 * 8bit ->
 # 'G' on index 0: 0b00 ^ 0b11 -> 0b11 (3), just as we wanted.
 # Same hold for every other index (and - 1 at the end for 3 letter strings).
-class Neopixel:
+class Neopixel(StripBase):
     def __init__(self, num_leds, state_machine, pin, mode="RGB", delay=0.0001):
         self.pixels = array.array("I", [0 for _ in range(num_leds)])
         self.mode = set(mode)   # set for better performance

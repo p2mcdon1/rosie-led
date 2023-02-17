@@ -1,5 +1,4 @@
 from animation import Animation
-from stripFactory import StripFactory
 
 
 class Bounce(Animation):
@@ -7,8 +6,7 @@ class Bounce(Animation):
     def __init__(self):
         Animation.__init__(self)
 
-        stripFactory = StripFactory()
-        self.strip = stripFactory.build()
+        self.strip = Animation.stripFactory.build()
 
         self.logSize = 10
         self.step = 2
@@ -19,10 +17,10 @@ class Bounce(Animation):
             self.logLeft, self.logSize, self.parms.ultraPink, self.parms.electricPurple)
 
     # override
-    def onRun(self, runFlag):
+    def run(self, checkRun):
         print('starting to run Bounce...')
 
-        while runFlag():
+        while checkRun():
             if (self.leftToRight):
                 self.logLeft = self.logLeft + 2
                 if (self.logLeft + self.logSize >= self.parms.count):

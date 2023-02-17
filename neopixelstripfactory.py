@@ -1,8 +1,9 @@
 from neopixel import Neopixel
 from parms import Parms
+from stripfactorybase import StripFactoryBase
 
 
-class StripFactory:
+class NeoPixelStripFactory(StripFactoryBase):
     def __init__(self):
         self.parms = Parms()
 

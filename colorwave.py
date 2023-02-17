@@ -1,5 +1,4 @@
 from animation import Animation
-from stripFactory import StripFactory
 
 
 class ColorWave(Animation):
@@ -9,9 +8,7 @@ class ColorWave(Animation):
 
         numpix = self.parms.count
 
-        stripFactory = StripFactory()
-
-        self.strip = stripFactory.build()
+        self.strip = Animation.stripFactory.build()
 
         colors_rgb = self.parms.getColors()
 
@@ -30,10 +27,10 @@ class ColorWave(Animation):
             current_pixel, numpix - 1, self.parms.violet, self.parms.electricPurple)
 
     # override
-    def onRun(self, runFlag):
+    def run(self, checkRun):
         print('starting to run ColorWave...')
 
-        while runFlag():
+        while checkRun():
             self.strip.rotate_right(1)
             self.rest()
             self.strip.show()

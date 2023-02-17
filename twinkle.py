@@ -1,6 +1,5 @@
 from animation import Animation
 import random
-from stripFactory import StripFactory
 
 
 class Twinkle(Animation):
@@ -8,8 +7,7 @@ class Twinkle(Animation):
     def __init__(self):
         Animation.__init__(self)
 
-        stripFactory = StripFactory()
-        self.strip = stripFactory.build()
+        self.strip = Animation.stripFactory.build()
 
         self.numberOfTwinklers = round(self.parms.count / 20)
         self.colors = self.parms.getColors(True)
@@ -21,11 +19,11 @@ class Twinkle(Animation):
         self.twinklers = []
 
     # override
-    def onRun(self, runFlag):
+    def run(self, checkRun):
         print('starting to run Twinkle...')
 
         addTwinklers = 0
-        while runFlag():
+        while checkRun():
             self.updateTwinklers()
 
             if (addTwinklers == 0):
@@ -37,12 +35,12 @@ class Twinkle(Animation):
 
                     if (color != self.parms.black and self.twinklers.count(pixel) < 1):
                         self.twinklers.append(pixel)
-            
+
             addTwinklers = addTwinklers + 1
-            
+
             if (addTwinklers > 10):
                 addTwinklers = 0
-                
+
             self.rest()
             self.strip.show()
 
