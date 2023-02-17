@@ -11,7 +11,7 @@ class KeyReader(ButtonBase):
 
             if key == keyboard.Key.esc:
                 # kill the program
-                raise Exception("Attempting to halt the program")
+                quit()
 
             val = ''
             try:

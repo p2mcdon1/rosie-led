@@ -30,15 +30,16 @@ class AsciiStrip(StripBase):
         self.pixels = self.pixels[num_of_pixels:] + self.pixels[:num_of_pixels]
 
     def show(self):
-        pass
+        print(''.join(self.pixels), end="\r")
 
     def __getChar(self, rgb):
+        if (rgb == self.parms.black):
+            return ' '
+
         if (AsciiStrip.__isLight(rgb)):
             return '-'
 
         match rgb:
-            case self.parms.black:
-                return ' '
             case self.parms.red:
                 return 'R'
             case self.parms.green:

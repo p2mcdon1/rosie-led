@@ -2,6 +2,12 @@ from animation import Animation
 import random
 
 
+class Twinkler:
+    def __init__(self):
+        self.rgb = (0, 0, 0)
+        self.velocity = 1
+
+
 class Twinkle(Animation):
 
     def __init__(self):
@@ -9,37 +15,35 @@ class Twinkle(Animation):
 
         self.strip = Animation.stripFactory.build()
 
-        self.numberOfTwinklers = round(self.parms.count / 20)
-        self.colors = self.parms.getColors(True)
-        self.pixelRgbs = []
+        self.numberOfTwinklers = max(1, round(self.parms.count / 10))
 
-        for x in range(self.parms.count):
-            self.pixelRgbs.append(self.parms.black)
+        self.fadeLength = 3
+        self.fadeCycleCount = self.fadeLength / self.parms.refresh
+        self.reduction = max(1, round(255 / self.fadeCycleCount))
+        self.colors = self.parms.getColors()
 
         self.twinklers = []
+        for x in range(self.parms.count):
+            self.twinklers.append(Twinkler())
 
     # override
     def run(self, checkRun):
         print('starting to run Twinkle...')
 
-        addTwinklers = 0
         while checkRun():
             self.updateTwinklers()
 
-            if (addTwinklers == 0):
-                for _ in range(random.randrange(0, self.numberOfTwinklers)):
-                    color = random.choice(self.colors)
-                    pixel = random.randrange(0, self.parms.count)
-                    self.strip.set_pixel(pixel, color)
-                    self.pixelRgbs[pixel] = color
+            currentNumberOfTwinklers = sum(
+                t.rgb != self.parms.black for t in self.twinklers)
+            numberToAdd = self.numberOfTwinklers - currentNumberOfTwinklers
+            for _ in range(numberToAdd):
+                color = random.choice(self.colors)
+                pixel = random.randrange(0, self.parms.count)
 
-                    if (color != self.parms.black and self.twinklers.count(pixel) < 1):
-                        self.twinklers.append(pixel)
-
-            addTwinklers = addTwinklers + 1
-
-            if (addTwinklers > 10):
-                addTwinklers = 0
+                self.strip.set_pixel(pixel, color)
+                twinkler = self.twinklers[pixel]
+                twinkler.rgb = color
+                twinkler.velocity = random.randint(1, 10)
 
             self.rest()
             self.strip.show()
@@ -49,30 +53,23 @@ class Twinkle(Animation):
     def updateTwinklers(self):
 
         index = 0
-        toRemove = []
         for t in self.twinklers:
-            pixelRgb = self.pixelRgbs[t]
-            if (pixelRgb == self.parms.black):
-                toRemove.append(index)
+            twinkler = self.twinklers[index]
 
-            reducedRgb = self.reduce(pixelRgb)
+            reducedRgb = self.reduce(twinkler)
             if (self.isEffectivelyOff(reducedRgb)):
                 reducedRgb = self.parms.black
 
-            self.pixelRgbs[t] = reducedRgb
-            self.strip.set_pixel(t, reducedRgb)
+            twinkler.rgb = reducedRgb
+            self.strip.set_pixel(index, reducedRgb)
 
             index = index + 1
 
-        toRemove.sort(reverse=True)
-        for i in toRemove:
-            self.twinklers.pop(i)
+    def reducePart(self, val, velocity):
+        return max(0, round(val - (self.reduction * velocity)))
 
-    def reducePart(self, val):
-        return round(val / 1.1)
-
-    def reduce(self, rgb):
-        return (self.reducePart(rgb[0]), self.reducePart(rgb[1]), self.reducePart(rgb[2]))
+    def reduce(self, twinkler: Twinkler):
+        return (tuple(map(lambda x: self.reducePart(x, twinkler.velocity), twinkler.rgb)))
 
     def isEffectivelyOff(self, rgb):
         return (rgb[0] + rgb[1] + rgb[2]) < 30

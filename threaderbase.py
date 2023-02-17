@@ -1,7 +1,7 @@
 class ThreaderBase:
     def startAnimation(self, run, checkRun):
         def func(): return self.__animate(run, checkRun)
-        self.__startAnimationThread(func)
+        self.startAnimationThread(func)
 
     def acquireLock(self):
         pass
@@ -14,5 +14,5 @@ class ThreaderBase:
         run(checkRun)
         self.releaseLock()
 
-    def __startAnimationThread(self, func):
+    def startAnimationThread(self, func):
         pass

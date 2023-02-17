@@ -24,7 +24,7 @@ class ColorWave(Animation):
             current_pixel += step
 
         self.strip.set_pixel_line_gradient(
-            current_pixel, numpix - 1, self.parms.violet, self.parms.electricPurple)
+            current_pixel, numpix - 1, colors[0], colors[-1])
 
     # override
     def run(self, checkRun):

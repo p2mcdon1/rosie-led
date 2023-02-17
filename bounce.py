@@ -1,4 +1,5 @@
 from animation import Animation
+import random
 
 
 class Bounce(Animation):
@@ -8,13 +9,15 @@ class Bounce(Animation):
 
         self.strip = Animation.stripFactory.build()
 
-        self.logSize = 10
+        self.logSize = max(1, round(self.parms.count / 30))
         self.step = 2
         self.logLeft = 0
         self.leftToRight = True
 
+        colors = self.parms.getColors()
+
         self.strip.set_pixel_line_gradient(
-            self.logLeft, self.logSize, self.parms.ultraPink, self.parms.electricPurple)
+            self.logLeft, self.logSize, random.choice(colors), random.choice(colors))
 
     # override
     def run(self, checkRun):

@@ -5,6 +5,7 @@ import threading
 class PyThreader(ThreaderBase):
     def __init__(self):
         self.baton = threading.Lock()
+        self.thread = None
 
     # override
     def acquireLock(self):
@@ -15,7 +16,7 @@ class PyThreader(ThreaderBase):
         self.baton.release()
 
     # override
-    def __startAnimationThread(self, func):
+    def startAnimationThread(self, func):
         if (self.thread is not None):
             self.thread.join()
 
