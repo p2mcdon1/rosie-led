@@ -15,5 +15,5 @@ class MicroThreader(ThreaderBase):
         self.baton.release()
 
     # override
-    def __startAnimationThread(self, func):
+    def startAnimationThread(self, func):
         _thread.start_new_thread(func, ())
