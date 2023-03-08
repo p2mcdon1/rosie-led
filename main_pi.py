@@ -1,7 +1,7 @@
 from animation import Animation
 from runner import Runner
 from microthreader import MicroThreader
-from momentarySwitch import MomentarySwitch
+from momentaryswitch import MomentarySwitch
 from neopixelstripfactory import NeoPixelStripFactory
 
 Animation.stripFactory = NeoPixelStripFactory()

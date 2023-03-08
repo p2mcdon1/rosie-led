@@ -28,11 +28,11 @@ class ColorWave(Animation):
 
     # override
     def run(self, checkRun):
-        print('starting to run ColorWave...')
+        print(f'starting to run {self.__class__.__name__}...')
 
         while checkRun():
             self.strip.rotate_right(1)
             self.rest()
             self.strip.show()
 
-        print('done running ColorWave')
+        print(f'done running {self.__class__.__name__}')

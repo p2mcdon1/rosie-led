@@ -21,7 +21,7 @@ class Bounce(Animation):
 
     # override
     def run(self, checkRun):
-        print('starting to run Bounce...')
+        print(f'starting to run {self.__class__.__name__}...')
 
         while checkRun():
             if (self.leftToRight):
@@ -44,4 +44,4 @@ class Bounce(Animation):
             self.rest()
             self.strip.show()
 
-        print('done running Bounce')
+        print(f'done running {self.__class__.__name__}')

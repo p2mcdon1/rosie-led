@@ -13,6 +13,7 @@ class Runner:
         self.selector = Selector()
 
     def __switch(self):
+        print()
         print('switching...')
 
         if self.runAnimation:
