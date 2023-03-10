@@ -10,11 +10,11 @@ class Pulse(Animation):
         self.strip = Animation.stripFactory.build()
 
         self.colors = self.parms.getColors()
-        self.colorIndex = 0
-        self.goalColor = self.parms.black
-        self.currentColor = self.parms.black
+        self.colorIndex = -1
+        self.__nextColor()
 
-        self.stepFactor = 21
+        self.chunkSize = 5
+        self.stepFactor = 16
         self.totalSteps = round(max(1, round(255 / self.stepFactor)) * 1.3)
         self.fading = False
         self.step = 0
@@ -24,24 +24,26 @@ class Pulse(Animation):
         print(f'starting to run {self.__class__.__name__}...')
 
         while checkRun():
-            if self.fading:
-                if (self.step > self.totalSteps):
-                    self.fading = False
-                    self.step = 0
-                    self.__nextColor()
-            else:
-                if (self.step > self.totalSteps):
-                    self.fading = True
-                    self.step = 0
+            for x in range(self.chunkSize):
+                if self.fading:
+                    if (self.step > self.totalSteps):
+                        self.fading = False
+                        self.step = 0
+                        self.__nextColor()
+                else:
+                    if (self.step > self.totalSteps):
+                        self.fading = True
+                        self.step = 0
 
-            for pixel in range(self.parms.count):
-                self.strip.set_pixel(pixel, self.currentColor)
+                for pixel in range(self.parms.count):
+                    self.strip.set_pixel(pixel, self.currentColor)
 
-            self.strip.show()
+                self.strip.show()
+
+                self.__adjustColor()
+                self.step += 1
+            
             self.rest()
-
-            self.__adjustColor()
-            self.step += 1
 
         print(f'done running {self.__class__.__name__}')
 
@@ -54,5 +56,5 @@ class Pulse(Animation):
         self.colorIndex += 1
         if (self.colorIndex >= len(self.colors)):
             self.colorIndex = 0
-        self.currentColor = self.colors[self.colorIndex]
-        self.goalColor = self.currentColor
+        self.currentColor = self.parms.black
+        self.goalColor = self.colors[self.colorIndex]

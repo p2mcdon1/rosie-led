@@ -1,6 +1,6 @@
 class Parms:
     count = 300
-    refresh = 0.01
+    refresh = 0.005
     pink = False
 
     def __init__(self):
@@ -8,7 +8,7 @@ class Parms:
         self.refresh = Parms.refresh
         self.brightness = 50
         self.momentarySwitchPin = 4
-        self.ledDataPin = 5
+        self.ledDataPin = 3
         self.electricPurple = (196, 0, 255)
         self.steelPink = (200, 39, 178)
         self.ultraPink = (251, 98, 246)
