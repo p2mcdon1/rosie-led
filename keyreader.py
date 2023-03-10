@@ -24,9 +24,9 @@ class KeyReader(ButtonBase):
                 self.__pressed = True
 
         # Collect events until released
-        listener = keyboard.Listener(
+        self.listener = keyboard.Listener(
             on_press=on_press)
-        listener.start()
+        self.listener.start()
 
     def wasPressed(self):
         if self.__pressed:
@@ -34,3 +34,6 @@ class KeyReader(ButtonBase):
             return True
         else:
             return False
+
+    def stopListening(self):
+        self.listener.stop()

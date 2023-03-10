@@ -20,7 +20,7 @@ class Twinkle(Animation):
 
         self.fadeLength = 3
         self.fadeCycleCount = self.fadeLength / self.parms.refresh
-        self.reduction = max(1, round(255 / self.fadeCycleCount))
+        self.reduction = -max(1, round(255 / self.fadeCycleCount))
         self.colors = self.parms.getColors()
 
         self.twinklers = []
@@ -67,4 +67,4 @@ class Twinkle(Animation):
             index = index + 1
 
     def reduce(self, twinkler: Twinkler):
-        return ColorUtility.reduce(twinkler.rgb, self.reduction, twinkler.velocity)
+        return ColorUtility.adjust(twinkler.rgb, self.reduction, twinkler.velocity)
