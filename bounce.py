@@ -14,34 +14,66 @@ class Bounce(Animation):
         self.logLeft = 0
         self.leftToRight = True
 
-        colors = self.parms.getColors()
-
-        self.strip.set_pixel_line_gradient(
-            self.logLeft, self.logSize, random.choice(colors), random.choice(colors))
+        self.colors = self.parms.getColors()
+        self.currentColor = self.parms.black
+        self.previousColor = self.parms.black
 
     # override
     def run(self, checkRun):
         print(f'starting to run {self.__class__.__name__}...')
 
+        self.setCurrentColor()
+
         while checkRun():
+
+            if (self.checkReverse()):
+                self.setCurrentColor()
+
             if (self.leftToRight):
-                self.logLeft = self.logLeft + 2
-                if (self.logLeft + self.logSize >= self.parms.count):
-                    self.leftToRight = False
-                    self.logLeft = self.logLeft - 2
-                    self.strip.rotate_left(self.step)
-                else:
-                    self.strip.rotate_right(self.step)
+                self.logLeft = self.logLeft + self.step
+                self.strip.rotate_right(self.step)
             else:
-                self.logLeft = self.logLeft - 2
-                if (self.logLeft < 0):
-                    self.leftToRight = True
-                    self.logLeft = self.logLeft + 2
-                    self.strip.rotate_right(self.step)
-                else:
-                    self.strip.rotate_left(self.step)
+                self.logLeft = self.logLeft - self.step
+                self.strip.rotate_left(self.step)
 
             self.rest()
             self.strip.show()
 
         print(f'done running {self.__class__.__name__}')
+
+    def shouldReverse(self):
+        if (self.leftToRight):
+            return (self.logLeft + self.logSize + self.step >= self.parms.count)
+        else:
+            return (self.logLeft - self.step < 0)
+
+    def checkReverse(self):
+        if (self.shouldReverse()):
+            self.leftToRight = not self.leftToRight
+            return True
+        else:
+            return False
+
+    def setCurrentColor(self):
+        self.previousColor = self.currentColor
+        self.currentColor = random.choice(self.colors)
+
+        logRange = range(self.logLeft, self.logLeft + self.logSize + 1, 1) if self.leftToRight else range(
+            self.logLeft + self.logSize, self.logLeft - 1, -1)
+
+        for pixel in logRange:
+            self.setPixelToCurrentColor(pixel)
+
+        if self.leftToRight:
+            self.setLogGradient(self.parms.black, self.currentColor)
+        else:
+            self.setLogGradient(self.currentColor, self.parms.black)
+
+    def setLogGradient(self, color1, color2):
+        self.strip.set_pixel_line_gradient(
+            self.logLeft, self.logLeft + self.logSize, color1, color2)
+
+    def setPixelToCurrentColor(self, pixel):
+        self.strip.set_pixel(pixel, self.currentColor)
+        self.rest()
+        self.strip.show()

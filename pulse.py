@@ -14,7 +14,7 @@ class Pulse(Animation):
 
         self.pulseLength = 5.0
         self.totalSteps = self.pulseLength / self.parms.refresh
-        self.stepModulo = round(self.totalSteps / 255)
+        self.stepModulo = max(1, round(self.totalSteps / 255))
         self.currentStep = 0
 
     # override
