@@ -1,13 +1,14 @@
 from buttonbase import ButtonBase
 from machine import Pin
+from parms import Parms
 
 
 class MomentarySwitch(ButtonBase):
     def __init__(self):
 
         self.__pressed = False
-
-        pin = Pin(4, Pin.IN, Pin.PULL_UP)
+        parms = Parms()
+        pin = Pin(parms.momentarySwitchPin, Pin.IN, Pin.PULL_UP)
 
         def button_callback(p):
             if not self.__pressed and pin.value() == 0:

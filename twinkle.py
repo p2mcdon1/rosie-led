@@ -1,4 +1,5 @@
 from animation import Animation
+from colorutility import ColorUtility
 import random
 
 
@@ -19,7 +20,7 @@ class Twinkle(Animation):
 
         self.fadeLength = 3
         self.fadeCycleCount = self.fadeLength / self.parms.refresh
-        self.reduction = max(1, round(255 / self.fadeCycleCount))
+        self.reduction = -max(1, round(255 / self.fadeCycleCount))
         self.colors = self.parms.getColors()
 
         self.twinklers = []
@@ -28,7 +29,7 @@ class Twinkle(Animation):
 
     # override
     def run(self, checkRun):
-        print('starting to run Twinkle...')
+        print(f'starting to run {self.__class__.__name__}...')
 
         while checkRun():
             self.updateTwinklers()
@@ -48,7 +49,7 @@ class Twinkle(Animation):
             self.rest()
             self.strip.show()
 
-        print('done running Twinkle')
+        print(f'done running {self.__class__.__name__}')
 
     def updateTwinklers(self):
 
@@ -57,7 +58,7 @@ class Twinkle(Animation):
             twinkler = self.twinklers[index]
 
             reducedRgb = self.reduce(twinkler)
-            if (self.isEffectivelyOff(reducedRgb)):
+            if (ColorUtility.isEffectivelyOff(reducedRgb)):
                 reducedRgb = self.parms.black
 
             twinkler.rgb = reducedRgb
@@ -65,11 +66,5 @@ class Twinkle(Animation):
 
             index = index + 1
 
-    def reducePart(self, val, velocity):
-        return max(0, round(val - (self.reduction * velocity)))
-
     def reduce(self, twinkler: Twinkler):
-        return (tuple(map(lambda x: self.reducePart(x, twinkler.velocity), twinkler.rgb)))
-
-    def isEffectivelyOff(self, rgb):
-        return (rgb[0] + rgb[1] + rgb[2]) < 30
+        return ColorUtility.adjust(twinkler.rgb, self.reduction, twinkler.velocity)

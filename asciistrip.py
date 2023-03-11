@@ -12,8 +12,10 @@ class AsciiStrip(StripBase):
             self.pixels.append(' ')
 
     def set_pixel_line_gradient(self, pixel1, pixel2, left_rgb_w, right_rgb_w):
-        for i in range(pixel1, pixel2 + 1):
-            self.set_pixel(i, left_rgb_w)
+        self.set_pixel(pixel1, left_rgb_w)
+        self.set_pixel(pixel2, right_rgb_w)
+        for i in range(pixel1 + 1, pixel2):
+            self.set_pixel(i, (122, 122, 122))
 
     def set_pixel(self, pixel_num, rgb_w):
         self.pixels[pixel_num] = self.__getChar(rgb_w)
@@ -34,7 +36,7 @@ class AsciiStrip(StripBase):
 
     def __getChar(self, rgb):
         if (rgb == self.parms.black):
-            return ' '
+            return '#'
 
         if (AsciiStrip.__isLight(rgb)):
             return '-'

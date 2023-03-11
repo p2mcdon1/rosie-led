@@ -6,7 +6,7 @@ from keyreader import KeyReader
 from runner import Runner
 
 Parms.count = 80
-Parms.refresh = 0.01
+Parms.refresh = 0.2
 
 Animation.stripFactory = AsciiStripFactory()
 
