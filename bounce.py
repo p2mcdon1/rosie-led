@@ -1,4 +1,5 @@
 from animation import Animation
+from palette import Palette
 import random
 
 
@@ -13,10 +14,6 @@ class Bounce(Animation):
         self.step = 2
         self.logLeft = 0
         self.leftToRight = True
-
-        self.colors = self.parms.getColors()
-        self.currentColor = self.parms.black
-        self.previousColor = self.parms.black
 
     # override
     def run(self, checkRun):
@@ -55,8 +52,7 @@ class Bounce(Animation):
             return False
 
     def setCurrentColor(self):
-        self.previousColor = self.currentColor
-        self.currentColor = random.choice(self.colors)
+        self.getNextRandomColor()
 
         logRange = range(self.logLeft, self.logLeft + self.logSize + 1, 1) if self.leftToRight else range(
             self.logLeft + self.logSize, self.logLeft - 1, -1)
@@ -65,15 +61,15 @@ class Bounce(Animation):
             self.setPixelToCurrentColor(pixel)
 
         if self.leftToRight:
-            self.setLogGradient(self.parms.black, self.currentColor)
+            self.setLogGradient(self.parms.black, self.getCurrentColor())
         else:
-            self.setLogGradient(self.currentColor, self.parms.black)
+            self.setLogGradient(self.getCurrentColor(), self.parms.black)
 
     def setLogGradient(self, color1, color2):
         self.strip.set_pixel_line_gradient(
             self.logLeft, self.logLeft + self.logSize, color1, color2)
 
     def setPixelToCurrentColor(self, pixel):
-        self.strip.set_pixel(pixel, self.currentColor)
+        self.strip.set_pixel(pixel, self.getCurrentColor())
         self.rest()
         self.strip.show()

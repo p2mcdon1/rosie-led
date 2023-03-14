@@ -10,14 +10,10 @@ class ColorWave(Animation):
 
         self.strip = Animation.stripFactory.build()
 
-        colors_rgb = self.parms.getColors()
-
-        # see notes about supporting white-light
-        colors = colors_rgb
-
-        step = round(numpix / len(colors))
+        step = round(numpix / self.palette.count)
         current_pixel = 0
 
+        colors = self.palette.getColors()
         for color1, color2 in zip(colors, colors[1:]):
             self.strip.set_pixel_line_gradient(
                 current_pixel, current_pixel + step, color1, color2)
