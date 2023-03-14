@@ -1,12 +1,13 @@
 from bounce import Bounce
 from colorwave import ColorWave
+from drip import Drip
 from pulse import Pulse
 from twinkle import Twinkle
 
 
 class Selector:
     def __init__(self):
-        self.animations = [Pulse(), Bounce(), ColorWave(), Twinkle()]
+        self.animations = [Bounce(), ColorWave(), Drip(), Pulse(), Twinkle()]
         self.selector = -1
 
     def switch(self):

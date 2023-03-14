@@ -9,8 +9,6 @@ class Pulse(Animation):
 
         self.strip = Animation.stripFactory.build()
 
-        self.colors = self.parms.getColors()
-        self.colorIndex = -1
         self.__nextColor()
 
         self.chunkSize = 5
@@ -42,7 +40,7 @@ class Pulse(Animation):
 
                 self.__adjustColor()
                 self.step += 1
-            
+
             self.rest()
 
         print(f'done running {self.__class__.__name__}')
@@ -53,8 +51,5 @@ class Pulse(Animation):
             self.currentColor, stepFactor, self.goalColor)
 
     def __nextColor(self):
-        self.colorIndex += 1
-        if (self.colorIndex >= len(self.colors)):
-            self.colorIndex = 0
         self.currentColor = self.parms.black
-        self.goalColor = self.colors[self.colorIndex]
+        self.goalColor = self.getNextRandomColor()

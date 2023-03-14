@@ -21,7 +21,6 @@ class Twinkle(Animation):
         self.fadeLength = 3
         self.fadeCycleCount = self.fadeLength / self.parms.refresh
         self.reduction = -max(1, round(255 / self.fadeCycleCount))
-        self.colors = self.parms.getColors()
 
         self.twinklers = []
         for x in range(self.parms.count):
@@ -38,7 +37,7 @@ class Twinkle(Animation):
                 t.rgb != self.parms.black for t in self.twinklers)
             numberToAdd = self.numberOfTwinklers - currentNumberOfTwinklers
             for _ in range(numberToAdd):
-                color = random.choice(self.colors)
+                color = self.getNextRandomColor()
                 pixel = random.randrange(0, self.parms.count)
 
                 self.strip.set_pixel(pixel, color)

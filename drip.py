@@ -8,66 +8,77 @@ class Drip(Animation):
         Animation.__init__(self)
 
         self.strip = Animation.stripFactory.build()
-        
         self.growing = True
-
-        self.colors = self.parms.getColors()
+        self.maxPixel = self.parms.count - 1
 
     # override
     def run(self, checkRun):
         print(f'starting to run {self.__class__.__name__}...')
 
+        self.initialize()
         self.setCurrentColor()
 
         while checkRun():
-
-            if (self.checkReverse()):
-                self.setCurrentColor()
-
-            if (self.leftToRight):
-                self.logLeft = self.logLeft + self.step
-                self.strip.rotate_right(self.step)
-            else:
-                self.logLeft = self.logLeft - self.step
-                self.strip.rotate_left(self.step)
+            self.step()
 
             self.rest()
             self.strip.show()
 
+            self.checkReverse()
+
         print(f'done running {self.__class__.__name__}')
 
-    def shouldReverse(self):
-        if (self.leftToRight):
-            return (self.logLeft + self.logSize + self.step >= self.parms.count)
-        else:
-            return (self.logLeft - self.step < 0)
-
     def checkReverse(self):
-        if (self.shouldReverse()):
-            self.leftToRight = not self.leftToRight
-            return True
+        if (not self.shouldReverse()):
+            return
+
+        self.growing = not self.growing
+        self.setCurrentColor()
+
+    def shouldReverse(self):
+        if self.growing:
+            return self.left == 0
         else:
-            return False
+            return self.left == self.getStartingLeft()
+
+    def initialize(self):
+        self.hasCenter = self.parms.count % 2 == 1
+
+        if self.hasCenter:
+            self.middle = max(0, round(self.parms.count / 2) - 1)
+        else:
+            self.middle = round(self.parms.count / 2)
+
+        self.left = self.getStartingLeft()
+        self.right = self.getStartingRight()
 
     def setCurrentColor(self):
-        self.currentColor = random.choice(self.colors)
+        color = self.getNextRandomColor()
 
-        middle = self.parms.count / 2
-        if (self.parms.count % 2 == 1):
-            # we have to paint the middle pixel
-            middle = round(self.parms.count / 2) - 1
-            self.left = middle - 1
-            self.right = middle + 1 
-            self.strip.set_pixel(middle, self.currentColor)
+        if not self.growing:
+            color = self.parms.black
+
+        if self.hasCenter:
+            self.strip.set_pixel(self.middle, color)
+
+        self.strip.set_pixel(self.left, color)
+        self.strip.set_pixel(self.right, color)
+
+    def step(self):
+        if self.growing:
+            color = self.getCurrentColor()
+            self.left = max(0, self.left - 1)
+            self.right = min(self.right + 1, self.maxPixel)
+            self.strip.set_pixel(self.left, color)
+            self.strip.set_pixel(self.right, color)
         else:
-            self.left = middle - 1
-            self.right = middle
+            self.left = min(self.getStartingLeft(), self.left + 1)
+            self.right = max(self.right - 1, self.getStartingRight())
+            self.strip.set_pixel(self.left, self.parms.black)
+            self.strip.set_pixel(self.right, self.parms.black)
 
-    def setLogGradient(self, color1, color2):
-        self.strip.set_pixel_line_gradient(
-            self.logLeft, self.logLeft + self.logSize, color1, color2)
+    def getStartingRight(self):
+        return min(self.maxPixel, self.middle + 1 if self.hasCenter else self.middle)
 
-    def setPixelToCurrentColor(self, pixel):
-        self.strip.set_pixel(pixel, self.currentColor)
-        self.rest()
-        self.strip.show()
+    def getStartingLeft(self):
+        return max(0, self.middle - 1)
