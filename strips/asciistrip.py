@@ -1,5 +1,5 @@
 from parms import Parms
-from stripbase import StripBase
+from strips.stripbase import StripBase
 
 
 class AsciiStrip(StripBase):

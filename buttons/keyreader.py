@@ -1,4 +1,4 @@
-from buttonbase import ButtonBase
+from buttons.buttonbase import ButtonBase
 from pynput import keyboard
 
 

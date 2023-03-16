@@ -1,9 +1,9 @@
-from buttonbase import ButtonBase
+from buttons.buttonbase import ButtonBase
 from machine import Pin
 from parms import Parms
 
 
-class MomentarySwitch(ButtonBase):
+class Momentary(ButtonBase):
     def __init__(self):
 
         self.__pressed = False

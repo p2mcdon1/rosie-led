@@ -1,19 +1,19 @@
-class ColorUtility:
+class Colors:
     def adjustPart(colorPart, adjustment, velocity=1):
         return min(255, max(0, round(colorPart + (adjustment * velocity))))
 
     def adjust(rgb, adjustment, velocity=1):
-        return (tuple(map(lambda x: ColorUtility.adjustPart(x, adjustment, velocity), rgb)))
+        return (tuple(map(lambda x: Colors.adjustPart(x, adjustment, velocity), rgb)))
 
     def adjustPartWithMax(colorPart, adjustment, maximum):
         return min(maximum, max(0, round(colorPart + adjustment)))
 
     def adjustWithLimit(rgb, adjustment, limitRgb):
-        r = ColorUtility.adjustPartWithMax(
+        r = Colors.adjustPartWithMax(
             rgb[0], adjustment, limitRgb[0])
-        g = ColorUtility.adjustPartWithMax(
+        g = Colors.adjustPartWithMax(
             rgb[1], adjustment, limitRgb[1])
-        b = ColorUtility.adjustPartWithMax(
+        b = Colors.adjustPartWithMax(
             rgb[2], adjustment, limitRgb[2])
 
         return (r, g, b)

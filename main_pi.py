@@ -1,12 +1,12 @@
-from animation import Animation
+from animations.animationbase import AnimationBase
+from buttons.momentary import Momentary
 from runner import Runner
-from microthreader import MicroThreader
-from momentaryswitch import MomentarySwitch
-from neopixelstripfactory import NeoPixelStripFactory
+from strips.neopixelstripfactory import NeoPixelStripFactory
+from threads.microthreader import MicroThreader
 
-Animation.stripFactory = NeoPixelStripFactory()
+AnimationBase.stripFactory = NeoPixelStripFactory()
 
-momentarySwitch = MomentarySwitch()
+momentarySwitch = Momentary()
 microThreader = MicroThreader()
 runner = Runner(momentarySwitch, microThreader)
 

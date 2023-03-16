@@ -1,14 +1,14 @@
-from animation import Animation
-from asciistripfactory import AsciiStripFactory
+from animations.animationbase import AnimationBase
+from buttons.keyreader import KeyReader
 from parms import Parms
-from pythreader import PyThreader
-from keyreader import KeyReader
 from runner import Runner
+from strips.asciistripfactory import AsciiStripFactory
+from threads.pythreader import PyThreader
 
 Parms.count = 80
 Parms.refresh = 0.2
 
-Animation.stripFactory = AsciiStripFactory()
+AnimationBase.stripFactory = AsciiStripFactory()
 
 pyThreader = PyThreader()
 keyReader = KeyReader()

@@ -1,4 +1,4 @@
-from threaderbase import ThreaderBase
+from threads.threaderbase import ThreaderBase
 import threading
 
 

@@ -1,13 +1,10 @@
-from animation import Animation
-from colorutility import ColorUtility
+from animations.animationbase import AnimationBase
+from utility.colors import Colors
 
 
-class Pulse(Animation):
-
+class Pulse(AnimationBase):
     def __init__(self):
-        Animation.__init__(self)
-
-        self.strip = Animation.stripFactory.build()
+        AnimationBase.__init__(self)
 
         self.__nextColor()
 
@@ -19,17 +16,17 @@ class Pulse(Animation):
 
     # override
     def run(self, checkRun):
-        print(f'starting to run {self.__class__.__name__}...')
+        print(f"starting to run {self.__class__.__name__}...")
 
         while checkRun():
             for x in range(self.chunkSize):
                 if self.fading:
-                    if (self.step > self.totalSteps):
+                    if self.step > self.totalSteps:
                         self.fading = False
                         self.step = 0
                         self.__nextColor()
                 else:
-                    if (self.step > self.totalSteps):
+                    if self.step > self.totalSteps:
                         self.fading = True
                         self.step = 0
 
@@ -43,12 +40,13 @@ class Pulse(Animation):
 
             self.rest()
 
-        print(f'done running {self.__class__.__name__}')
+        print(f"done running {self.__class__.__name__}")
 
     def __adjustColor(self):
         stepFactor = -self.stepFactor if self.fading else self.stepFactor
-        self.currentColor = ColorUtility.adjustWithLimit(
-            self.currentColor, stepFactor, self.goalColor)
+        self.currentColor = Colors.adjustWithLimit(
+            self.currentColor, stepFactor, self.goalColor
+        )
 
     def __nextColor(self):
         self.currentColor = self.parms.black

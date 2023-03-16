@@ -1,5 +1,5 @@
 import _thread
-from threaderbase import ThreaderBase
+from threads.threaderbase import ThreaderBase
 
 
 class MicroThreader(ThreaderBase):
