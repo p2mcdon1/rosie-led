@@ -1,14 +1,9 @@
-from animation import Animation
-from palette import Palette
-import random
+from animations.animationbase import AnimationBase
 
 
-class Bounce(Animation):
-
+class Bounce(AnimationBase):
     def __init__(self):
-        Animation.__init__(self)
-
-        self.strip = Animation.stripFactory.build()
+        AnimationBase.__init__(self)
 
         self.logSize = max(1, round(self.parms.count / 30))
         self.step = 2
@@ -17,16 +12,15 @@ class Bounce(Animation):
 
     # override
     def run(self, checkRun):
-        print(f'starting to run {self.__class__.__name__}...')
+        print(f"starting to run {self.__class__.__name__}...")
 
         self.setCurrentColor()
 
         while checkRun():
-
-            if (self.checkReverse()):
+            if self.checkReverse():
                 self.setCurrentColor()
 
-            if (self.leftToRight):
+            if self.leftToRight:
                 self.logLeft = self.logLeft + self.step
                 self.strip.rotate_right(self.step)
             else:
@@ -36,16 +30,16 @@ class Bounce(Animation):
             self.rest()
             self.strip.show()
 
-        print(f'done running {self.__class__.__name__}')
+        print(f"done running {self.__class__.__name__}")
 
     def shouldReverse(self):
-        if (self.leftToRight):
-            return (self.logLeft + self.logSize + self.step >= self.parms.count)
+        if self.leftToRight:
+            return self.logLeft + self.logSize + self.step >= self.parms.count
         else:
-            return (self.logLeft - self.step < 0)
+            return self.logLeft - self.step < 0
 
     def checkReverse(self):
-        if (self.shouldReverse()):
+        if self.shouldReverse():
             self.leftToRight = not self.leftToRight
             return True
         else:
@@ -54,8 +48,11 @@ class Bounce(Animation):
     def setCurrentColor(self):
         self.getNextRandomColor()
 
-        logRange = range(self.logLeft, self.logLeft + self.logSize + 1, 1) if self.leftToRight else range(
-            self.logLeft + self.logSize, self.logLeft - 1, -1)
+        logRange = (
+            range(self.logLeft, self.logLeft + self.logSize + 1, 1)
+            if self.leftToRight
+            else range(self.logLeft + self.logSize, self.logLeft - 1, -1)
+        )
 
         for pixel in logRange:
             self.setPixelToCurrentColor(pixel)
@@ -67,7 +64,8 @@ class Bounce(Animation):
 
     def setLogGradient(self, color1, color2):
         self.strip.set_pixel_line_gradient(
-            self.logLeft, self.logLeft + self.logSize, color1, color2)
+            self.logLeft, self.logLeft + self.logSize, color1, color2
+        )
 
     def setPixelToCurrentColor(self, pixel):
         self.strip.set_pixel(pixel, self.getCurrentColor())

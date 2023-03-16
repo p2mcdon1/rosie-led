@@ -38,7 +38,6 @@ def sk6812():
     nop()                   .side(0)[T2 - 1]
     wrap()
 
-
 # Delay here is the reset time. You need a pause to reset the LED strip back to the initial LED
 # however, if you have quite a bit of processing to do before the next time you update the strip
 # you could put in delay=0 (or a lower delay)
@@ -51,7 +50,9 @@ def sk6812():
 # Example: in 'GRBW' we want final form of 0bGGRRBBWW, meaning G with index 0 needs to be shifted 3 * 8bit ->
 # 'G' on index 0: 0b00 ^ 0b11 -> 0b11 (3), just as we wanted.
 # Same hold for every other index (and - 1 at the end for 3 letter strings).
-class Neopixel(StripBase):
+
+
+class NeopixelStrip(StripBase):
     def __init__(self, num_leds, state_machine, pin, mode="RGB", delay=0.0001):
         self.pixels = array.array("I", [0 for _ in range(num_leds)])
         self.mode = set(mode)   # set for better performance

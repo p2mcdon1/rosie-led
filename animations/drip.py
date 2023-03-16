@@ -1,19 +1,16 @@
-from animation import Animation
-import random
+from animations.animationbase import AnimationBase
 
 
-class Drip(Animation):
-
+class Drip(AnimationBase):
     def __init__(self):
-        Animation.__init__(self)
+        AnimationBase.__init__(self)
 
-        self.strip = Animation.stripFactory.build()
         self.growing = True
         self.maxPixel = self.parms.count - 1
 
     # override
     def run(self, checkRun):
-        print(f'starting to run {self.__class__.__name__}...')
+        print(f"starting to run {self.__class__.__name__}...")
 
         self.initialize()
         self.setCurrentColor()
@@ -26,10 +23,10 @@ class Drip(Animation):
 
             self.checkReverse()
 
-        print(f'done running {self.__class__.__name__}')
+        print(f"done running {self.__class__.__name__}")
 
     def checkReverse(self):
-        if (not self.shouldReverse()):
+        if not self.shouldReverse():
             return
 
         self.growing = not self.growing
