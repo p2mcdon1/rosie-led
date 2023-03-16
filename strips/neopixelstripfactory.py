@@ -1,6 +1,6 @@
-from strips.neopixelstrip import NeopixelStrip
 from parms import Parms
-from stripfactorybase import StripFactoryBase
+from strips.neopixelstrip import NeopixelStrip
+from strips.stripfactorybase import StripFactoryBase
 
 
 class NeoPixelStripFactory(StripFactoryBase):

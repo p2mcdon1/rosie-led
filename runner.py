@@ -1,6 +1,5 @@
 from buttons.buttonbase import ButtonBase
 from selector import Selector
-import signal
 from threads.threaderbase import ThreaderBase
 import time
 
@@ -13,14 +12,6 @@ class Runner:
         self.button = button
         self.selector = Selector()
         self.keepRunning = True
-
-        def handler(signum, frame):
-            self.runAnimation = False
-            self.threader.acquireLock()
-            self.button.stopListening()
-            self.keepRunning = False
-
-        signal.signal(signal.SIGINT, handler)
 
     def __switch(self):
         print()

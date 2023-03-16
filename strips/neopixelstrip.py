@@ -1,5 +1,5 @@
 import array
-from stripbase import StripBase
+from strips.stripbase import StripBase
 import time
 from machine import Pin
 import rp2
